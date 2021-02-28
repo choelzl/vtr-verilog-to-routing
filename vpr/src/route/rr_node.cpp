@@ -90,3 +90,11 @@ void t_rr_node::set_direction(Direction new_direction) {
 void t_rr_node::add_side(e_side new_side) {
     storage_->add_node_side(id_, new_side);
 }
+
+void t_rr_node::set_node_crosstalk_add_n_node(RRNodeId neighbour, float v){
+    storage_->set_node_crosstalk_add_n_node(id_,neighbour,v);
+}
+
+std::map<RRNodeId,float> t_rr_node::get_node_crosstalk_n() const {
+    return storage_->get_node_crosstalk_n(id_);
+}

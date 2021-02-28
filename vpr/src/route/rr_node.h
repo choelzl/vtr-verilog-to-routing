@@ -105,6 +105,8 @@ class t_rr_node {
 
     bool is_node_on_specific_side(e_side side) const;
 
+    std::map<RRNodeId,float> get_node_crosstalk_n() const;
+
     bool validate() const;
 
   public: //Mutators
@@ -123,6 +125,9 @@ class t_rr_node {
     void set_direction(Direction);
     void set_side(e_side);
     void add_side(e_side);
+
+
+    void set_node_crosstalk_add_n_node(RRNodeId neighbour, float v);
 
     void next_node() {
         id_ = RRNodeId((size_t)(id_) + 1);
