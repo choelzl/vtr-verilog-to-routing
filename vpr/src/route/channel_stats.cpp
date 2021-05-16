@@ -15,6 +15,7 @@ void print_channel_stats() {
     histogram.emplace_back(0.3, 0.4);
     histogram.emplace_back(0.4, 0.5);
     histogram.emplace_back(0.5, 0.6);
+    histogram.emplace_back(0.6, 0.7);
     histogram.emplace_back(0.7, 0.8);
     histogram.emplace_back(0.8, 0.9);
     histogram.emplace_back(0.9, 1.0);
