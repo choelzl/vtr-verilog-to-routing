@@ -26,8 +26,13 @@
 
 #if defined(VPR_USE_TBB)
 #    include <tbb/parallel_for_each.h>
+#endif
+
+#if defined(VPR_USE_TBB_PRE_2021)
 #    include <tbb/mutex.h>
 #endif
+
+
 
 /* we're profiling routing cost over many tracks for each wire type, so we'll
  * have many cost entries at each |dx|,|dy| offset. There are many ways to
@@ -428,8 +433,11 @@ void ExtendedMapLookahead::compute(const std::vector<t_segment_inf>& segment_inf
     util::RoutingCosts all_base_costs;
 
     /* run Dijkstra's algorithm for each segment type & channel type combination */
-#if defined(VPR_USE_TBB) // Run parallely
+#if defined(VPR_USE_TBB_PRE_2021) // Run parallely
     tbb::mutex all_costs_mutex;
+    tbb::parallel_for_each(sample_regions, [&](const SampleRegion& region) {
+#elif defined(VPR_USE_TBB_POST_2021)
+    std::mutex all_costs_mutex;
     tbb::parallel_for_each(sample_regions, [&](const SampleRegion& region) {
 #else // Run serially
     for (const auto& region : sample_regions) {
