@@ -2344,6 +2344,10 @@ argparse::ArgumentParser create_arg_parser(std::string prog_name, t_options& arg
         .help("NN1: Keep only nn1 in the VTR generated library")
         .default_value("off");
 
+    route_grp.add_argument<bool, ParseOnOff>(args.crosstalk_bnn, "--crosstalk_bnn")
+        .help("BNN: Select Block NN Library")
+        .default_value("off");
+
     route_grp.add_argument<float>(args.crosstalk_rand_sn, "--crosstalk_rand_sn")
             .help("Randomly label sensitive nets % [0-100]")
             .default_value("0");

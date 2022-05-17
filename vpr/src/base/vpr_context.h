@@ -236,6 +236,7 @@ struct DeviceContext : public Context {
 
     t_crosstalk_lib ctrs_lib;
     t_crosstalk_lib ctrs_lib_tmp;
+    t_crosstalk_lib ctrs_lib_tmp_b;
     t_crosstalk_source ctrs_lib_src;
 };
 

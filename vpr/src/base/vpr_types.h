@@ -1299,6 +1299,7 @@ struct t_router_opts {
     float crosstalk_threshold;
     float crosstalk_rand_sn;
     bool crosstalk_nn1 = false;
+    bool crosstalk_bnn = false;
     bool crosstalk_sorting = true;
     std::vector<std::string> crosstalk_tn;
     std::vector<std::string> crosstalk_sn;

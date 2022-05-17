@@ -342,6 +342,7 @@ void create_rr_graph(const t_graph_type graph_type,
 
         free_rr_graph();
         mutable_device_ctx.ctrs_lib_tmp.clear();
+        mutable_device_ctx.ctrs_lib_tmp_b.clear();
 
         build_rr_graph(graph_type,
                        block_types,
@@ -411,9 +412,11 @@ void create_rr_graph(const t_graph_type graph_type,
       crosstalk_nodeId_pair cp;
       float v;
       VTR_LOG_WARN("No CTRS_LIB found, using auto-generated track-index lib\n");
-      CrosstalkLibWrite("test_lib_gen.ctrs", &mutable_device_ctx.ctrs_lib_tmp);
-      VTR_LOG("Saving CTRS_LIB with %d entries for %d RR-entries\n", mutable_device_ctx.ctrs_lib_tmp.size(), mutable_device_ctx.rr_nodes.size());
-      for (auto& i : mutable_device_ctx.ctrs_lib_tmp){
+      t_crosstalk_lib cl = mutable_device_ctx.ctrs_lib_tmp;
+      if(router_opts.crosstalk_bnn) cl = mutable_device_ctx.ctrs_lib_tmp_b;
+      CrosstalkLibWrite("test_lib_gen.ctrs", &cl);
+      VTR_LOG("Saving CTRS_LIB with %d entries for %d RR-entries\n", cl.size(), mutable_device_ctx.rr_nodes.size());
+      for (auto& i : cl){
         cp = i.first;
         v = i.second;
         if(mutable_device_ctx.rr_nodes.node_type(RRNodeId(cp.first))!= CHANX && 
@@ -424,7 +427,7 @@ void create_rr_graph(const t_graph_type graph_type,
         RRNodeId b = RRNodeId(cp.second);
         if(a==RRNodeId() || b==RRNodeId()) continue;
 
-        if(v<1.0 && router_opts.crosstalk_nn1) continue;
+        if(router_opts.crosstalk_bnn && router_opts.crosstalk_nn1 && v < 1.0) continue;
 
         mutable_device_ctx.rr_nodes.set_node_crosstalk_add_n_node(a,b, v);
         mutable_device_ctx.rr_nodes.set_node_crosstalk_add_n_node(b,a, v);
@@ -1813,6 +1816,7 @@ static void build_rr_chan(RRGraphBuilder& rr_graph_builder,
       int l = (chan_type == CHANX)? rr_graph.node_xlow(node) : rr_graph.node_ylow(node);
       int h = (chan_type == CHANX)? rr_graph.node_xhigh(node) : rr_graph.node_yhigh(node);
 
+      #define LONG_WIRE_LENGTH 10
       for(int level = 1; level <= 2; ++level){ //Loop through two last wires
           if(track-level<0)
             continue;
@@ -1832,8 +1836,12 @@ static void build_rr_chan(RRGraphBuilder& rr_graph_builder,
 
           if(level == 1){
                 m_device_ctx.ctrs_lib_tmp.emplace(crosstalk_nodeId_pair(nodev,nv), overlap); // Overlap length = crosstalk
+                if( (h-l) > LONG_WIRE_LENGTH && (nh-nl) >= LONG_WIRE_LENGTH)
+                    m_device_ctx.ctrs_lib_tmp_b.emplace(crosstalk_nodeId_pair(nodev,nv), 1); // BNN 
           }else if(level == 2){
                 m_device_ctx.ctrs_lib_tmp.emplace(crosstalk_nodeId_pair(nodev,nv), overlap/20.0); //Paper noted 20x less crosstalk if not first neighbour.
+                if( (h-l) > LONG_WIRE_LENGTH && (nh-nl) >= LONG_WIRE_LENGTH)
+                    m_device_ctx.ctrs_lib_tmp_b.emplace(crosstalk_nodeId_pair(nodev,nv), 0.05); // BNN 
           }else{
             //400x less so ignored
           }
