@@ -170,6 +170,7 @@ static void ShowCrosstalkSetup(const t_router_opts& RouterOpts){
     VTR_LOG("RouterOpts.crosstalk_sit: %d\n", RouterOpts.crosstalk_sit);
     VTR_LOG("RouterOpts.crosstalk_sorting: %d\n", RouterOpts.crosstalk_sorting);
     VTR_LOG("RouterOpts.crosstalk_nn1: %d\n", RouterOpts.crosstalk_nn1);
+    VTR_LOG("RouterOpts.crosstalk_bnn: %d\n", RouterOpts.crosstalk_bnn);
     VTR_LOG("RouterOpts.crosstalk_threshold: %f\n", RouterOpts.crosstalk_threshold);
 }
 

@@ -184,6 +184,7 @@ struct t_options {
     argparse::ArgValue<bool> crosstalk_sit;
     argparse::ArgValue<bool> crosstalk_sorting;
     argparse::ArgValue<bool> crosstalk_nn1;
+    argparse::ArgValue<bool> crosstalk_bnn;
     argparse::ArgValue<float> crosstalk_threshold;
     argparse::ArgValue<float> crosstalk_rand_sn;
     argparse::ArgValue<std::string> crosstalk_sn;

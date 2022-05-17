@@ -132,6 +132,7 @@ void SetupVPR(const t_options* Options,
         }
         device_ctx.ctrs_lib.clear();
         device_ctx.ctrs_lib_tmp.clear();
+        device_ctx.ctrs_lib_tmp_b.clear();
         device_ctx.ctrs_lib_src.clear();
         if(Options->crosstalk_lib_file.value() != "") {
             vtr::ScopedStartFinishTimer tt("Importing CTRS Lib");
@@ -442,6 +443,7 @@ static void SetupRouterOpts(const t_options& Options, t_router_opts* RouterOpts)
     RouterOpts->crosstalk_sit = Options.crosstalk_sit;
     RouterOpts->crosstalk_sorting = Options.crosstalk_sorting;
     RouterOpts->crosstalk_nn1 = Options.crosstalk_nn1;
+    RouterOpts->crosstalk_bnn = Options.crosstalk_bnn;
     RouterOpts->crosstalk_threshold = Options.crosstalk_threshold;
     RouterOpts->crosstalk_rand_sn = Options.crosstalk_rand_sn/100.0;
 
