@@ -809,8 +809,13 @@ bool try_timing_driven_route_tmpl(const t_router_opts& router_opts,
 
         /* Restore congestion from best route */
         for (auto net_id : cluster_ctx.clb_nlist.nets()) {
-            pathfinder_update_path_occupancy(route_ctx.trace[net_id].head, -1);
-            pathfinder_update_path_occupancy(best_routing[net_id].head, 1);
+            if(router_opts.crosstalk_rs==CTRS_CT){
+                pathfinder_update_path_occupancy_and_crosstalk(net_id, route_ctx.trace[net_id].head, -1);
+                pathfinder_update_path_occupancy_and_crosstalk(net_id, best_routing[net_id].head, 1);
+            }else{
+                pathfinder_update_path_occupancy(route_ctx.trace[net_id].head, -1);
+                pathfinder_update_path_occupancy(best_routing[net_id].head, 1);
+            }
         }
         router_ctx.trace = best_routing;
         router_ctx.crosstalk = best_routing_crosstalk;
